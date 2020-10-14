@@ -23,10 +23,6 @@ const styles = StyleSheet.create({
   },
 })
 
-// TODO
-// 1. If selected ans is wrong, show x icon and stay in the same question.
-// 2. If correctAnsCount === numberOfQuestions go back to home
-
 class Quiz extends React.Component {
   constructor(props) {
     super(props)
@@ -40,6 +36,12 @@ class Quiz extends React.Component {
     }
     this.evaluate = this.evaluate.bind(this)
     this.nextQuestion = this.nextQuestion.bind(this)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.isGameOver !== this.state.isGameOver) {
+      this.props.navigation.navigate('listOfQuizzes')
+    }
   }
 
   // Evaluate if an answer is correct
@@ -74,6 +76,7 @@ class Quiz extends React.Component {
       if (nextQuestionIndex === state.numberOfQuestions) {
         return {
           isGameOver: true,
+          hasAnswered: false,
         }
       }
       return {
@@ -84,9 +87,6 @@ class Quiz extends React.Component {
   }
 
   render() {
-    if (this.state.isGameOver) {
-      this.props.navigation.navigate('listOfQuizzes')
-    }
     const question = this.props.route.params.questions[
       this.state.activeQuestionIndex
     ]
