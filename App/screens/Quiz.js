@@ -40,7 +40,11 @@ class Quiz extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.isGameOver !== this.state.isGameOver) {
-      this.props.navigation.navigate('listOfQuizzes')
+      this.props.navigation.navigate('summary', {
+        correctAnsCount: this.state.correctAnsCount,
+        numberOfQuestions: this.state.numberOfQuestions,
+        bgColor: this.props.route.params.bgColor,
+      })
     }
   }
 
@@ -70,9 +74,7 @@ class Quiz extends React.Component {
 
   nextQuestion = () => {
     this.setState((state) => {
-      const nextQuestionIndex = state.isCorrect
-        ? state.activeQuestionIndex + 1
-        : state.activeQuestionIndex
+      const nextQuestionIndex = state.activeQuestionIndex + 1
       if (nextQuestionIndex === state.numberOfQuestions) {
         return {
           isGameOver: true,
